@@ -2,7 +2,10 @@ import random
 import shutil
 
 
-options = ('rock', 'paper', 'scissors')
+options = ('rock', 'gun', 'lightning', 'devil', 'dragon', 'water', 'air',
+           'paper', 'sponge', 'wolf', 'tree', 'human', 'snake',
+           'scissors', 'fire')
+chosen_options = ['rock', 'paper', 'scissors']
 user_choice = ""
 computer_choice = ""
 is_game_stopped = False
@@ -21,7 +24,7 @@ def find_and_print_result():
     else:
         user_choice_number = options.index(user_choice)
         computer_choice_number = options.index(computer_choice)
-        user_wins = user_choice_number == (computer_choice_number + 1) % 3
+        user_wins = (user_choice_number - computer_choice_number + len(options)) % len(options) <= int(len(options)/2)
         if user_wins:
             print(f"Well done. The computer chose {computer_choice} and failed")
             user_rating += 100
@@ -33,7 +36,7 @@ def game_turn(choice):
     global user_choice
     global computer_choice
     user_choice = choice
-    computer_choice = random.choice(options)
+    computer_choice = random.choice(chosen_options)
     find_and_print_result()
 
 
@@ -56,12 +59,22 @@ def get_information():
         file_content.append("")
 
 
+def get_options():
+    global chosen_options
+    user_options = input()
+    if not user_options == "":
+        chosen_options = user_options.split(",")
+    chosen_options = tuple(chosen_options)
+    print("Okay, let's start")
+
+
 user_name = input("Enter your name: ")
 print(f"Hello, {user_name}")
 get_information()
+get_options()
 while not is_game_stopped:
     command = input()
-    while command not in options \
+    while command not in chosen_options \
             and not command == "!exit" \
             and not command == "!rating":
         print("Invalid input")
